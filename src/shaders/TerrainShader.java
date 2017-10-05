@@ -5,13 +5,12 @@ package shaders;
 
 import entities.Camera;
 import entities.Light;
-import toolBox.*;
+import math.*;
 
-public class TerrainShader extends ShaderProgram
-{
+public class TerrainShader extends ShaderProgram {
 	private static final String VERTEX_FILE = "src/shaders/terrainVertexShader.txt";
 	private static final String FRAGMENT_FILE = "src/shaders/TerrainFragmentShader.txt";
-	
+
 	private int location_transformationMatrix;
 	private int location_projectionMatrix;
 	private int location_viewMatrix;
@@ -20,7 +19,7 @@ public class TerrainShader extends ShaderProgram
 	private int location_shineDamper;
 	private int location_reflectivity;
 	private int location_skyColour;
-	
+
 	private int location_backgroundTexture;
 	private int location_rTexture;
 	private int location_gTexture;
@@ -28,32 +27,29 @@ public class TerrainShader extends ShaderProgram
 	private int location_blendMap;
 	private int location_density;
 	private int location_gradient;
-	
-	public TerrainShader()
-	{
+
+	public TerrainShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
 	}
-	
+
 	@Override
-	protected void bindAttributes()
-	{
+	protected void bindAttributes() {
 		super.bindAttribute(0, "position");
 		super.bindAttribute(1, "textureCoords");
 		super.bindAttribute(2, "normal");
 	}
 
 	@Override
-	protected void getAllUniformLocations()
-	{
-		location_transformationMatrix= super.getUniformLocation("transformationMatrix");
-		location_projectionMatrix= super.getUniformLocation("projectionMatrix");
-		location_viewMatrix= super.getUniformLocation("viewMatrix");
+	protected void getAllUniformLocations() {
+		location_transformationMatrix = super.getUniformLocation("transformationMatrix");
+		location_projectionMatrix = super.getUniformLocation("projectionMatrix");
+		location_viewMatrix = super.getUniformLocation("viewMatrix");
 		location_lightPosition = super.getUniformLocation("lightPosition");
-		location_lightColour= super.getUniformLocation("lightColour");
+		location_lightColour = super.getUniformLocation("lightColour");
 		location_shineDamper = super.getUniformLocation("shineDamper");
 		location_reflectivity = super.getUniformLocation("reflectivity");
 		location_skyColour = super.getUniformLocation("skyColour");
-		
+
 		location_backgroundTexture = super.getUniformLocation("backgroundTexture");
 		location_rTexture = super.getUniformLocation("rTexture");
 		location_gTexture = super.getUniformLocation("gTexture");
@@ -62,12 +58,12 @@ public class TerrainShader extends ShaderProgram
 		location_density = super.getUniformLocation("density");
 		location_gradient = super.getUniformLocation("gradient");
 	}
-	
+
 	public void loadFogVariables(float density, float gradient) {
 		super.loadFloat(location_density, density);
 		super.loadFloat(location_gradient, gradient);
 	}
-	
+
 	public void connectTextureUnits() {
 		super.loadInt(location_backgroundTexture, 0);
 		super.loadInt(location_rTexture, 1);
@@ -75,34 +71,30 @@ public class TerrainShader extends ShaderProgram
 		super.loadInt(location_bTexture, 3);
 		super.loadInt(location_blendMap, 4);
 	}
-	
+
 	public void loadSkyColour(Vector3f skyColour) {
 		super.loadVector(location_skyColour, skyColour);
 	}
-	
-	public void loadShineVariables(float shineDamper, float reflectivity)
-	{
+
+	public void loadShineVariables(float shineDamper, float reflectivity) {
 		super.loadFloat(location_shineDamper, shineDamper);
 		super.loadFloat(location_reflectivity, reflectivity);
 	}
-	
-	public void loadTransformationMatrix(Matrix4f matrix)
-	{
+
+	public void loadTransformationMatrix(Matrix4f matrix) {
 		super.loadMatrix(location_transformationMatrix, matrix);
 	}
-	
-	public void loadLight (Light light)
-	{
+
+	public void loadLight(Light light) {
 		super.loadVector(location_lightPosition, light.getPosition());
 		super.loadVector(location_lightColour, light.getColour());
 	}
-	
-	public void loadProjectionMatrix(Matrix4f projection)
-	{
+
+	public void loadProjectionMatrix(Matrix4f projection) {
 		super.loadMatrix(location_projectionMatrix, projection);
 	}
-	public void loadViewMatrix(Camera camera)
-	{
+
+	public void loadViewMatrix(Camera camera) {
 		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		super.loadMatrix(location_viewMatrix, viewMatrix);
 	}
