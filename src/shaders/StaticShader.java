@@ -2,12 +2,12 @@ package shaders;
 
 //import org.lwjgl.util.vector.Matrix4f;
 //import org.lwjgl.util.vector.Vector3f;
-
+import org.joml.*;
 import entities.Camera;
 import entities.Light;
 import math.Maths;
-import math.Matrix4f;
-import math.Vector3f;
+//import math.Matrix4f;
+//import math.Vector3f;
 
 public class StaticShader extends ShaderProgram {
 	private static final String VERTEX_FILE = "src/shaders/vertexShader.txt";

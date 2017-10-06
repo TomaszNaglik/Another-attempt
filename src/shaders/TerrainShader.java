@@ -1,11 +1,15 @@
 package shaders;
 
+import org.joml.*;
+
 //import org.lwjgl.util.vector.Matrix4f;
 //import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
 import entities.Light;
 import math.*;
+//import redundant.Matrix4f;
+//import redundant.Vector3f;
 
 public class TerrainShader extends ShaderProgram {
 	private static final String VERTEX_FILE = "src/shaders/terrainVertexShader.txt";

@@ -1,8 +1,12 @@
 package terrains;
 
+import org.joml.*;
+
 import gameObject.GameObject;
 import math.*;
 import models.RawModel;
+//import redundant.Quaternion;
+//import redundant.Vector3f;
 import renderEngine.Loader;
 import textures.ModelTexture;
 import textures.TerrainTexture;
@@ -19,11 +23,11 @@ public class Terrain extends GameObject {
 	private TerrainTexture blendMap;
 
 	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap) {
-		super(new Vector3f(gridX, 0, gridZ), new Quaternion(0, 0, 0, 1), new Vector3f(1, 1, 1));
+		super(new Vector3f(gridX, 0, gridZ), new Quaternionf(0, 0, 0, 1), new Vector3f(1, 1, 1));
 		this.texturePack = texturePack;
 		this.blendMap = blendMap;
-		this.x = transform.GetPos().GetX();
-		this.z = transform.GetPos().GetZ();
+		this.x = transform.GetPos().x;
+		this.z = transform.GetPos().z;
 		this.model = generateTerrain(loader);
 	}
 

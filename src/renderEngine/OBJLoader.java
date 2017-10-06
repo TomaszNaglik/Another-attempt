@@ -7,9 +7,11 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import math.Vector2f;
-import math.Vector3f;
+import org.joml.*;
+
 import models.RawModel;
+//import redundant.Vector2f;
+//import redundant.Vector3f;
 
 public class OBJLoader {
 	public static RawModel loadOBJModel(String fileName, Loader loader) {
@@ -80,9 +82,9 @@ public class OBJLoader {
 
 		int vertexPointer = 0;
 		for (Vector3f vertex : vertices) {
-			verticesArray[vertexPointer++] = vertex.GetX();
-			verticesArray[vertexPointer++] = vertex.GetY();
-			verticesArray[vertexPointer++] = vertex.GetZ();
+			verticesArray[vertexPointer++] = vertex.x;
+			verticesArray[vertexPointer++] = vertex.y;
+			verticesArray[vertexPointer++] = vertex.z;
 
 		}
 
@@ -100,12 +102,12 @@ public class OBJLoader {
 		indices.add(currentVertexPointer);
 
 		Vector2f currentTex = textures.get(Integer.parseInt(vertexData[1]) - 1);
-		textureArray[currentVertexPointer * 2] = currentTex.GetX();
-		textureArray[currentVertexPointer * 2 + 1] = 1 - currentTex.GetY();
+		textureArray[currentVertexPointer * 2] = currentTex.x;
+		textureArray[currentVertexPointer * 2 + 1] = 1 - currentTex.y;
 		Vector3f currentNorm = normals.get(Integer.parseInt(vertexData[2]) - 1);
-		normalsArray[currentVertexPointer * 3] = currentNorm.GetX();
-		normalsArray[currentVertexPointer * 3 + 1] = currentNorm.GetY();
-		normalsArray[currentVertexPointer * 3 + 2] = currentNorm.GetZ();
+		normalsArray[currentVertexPointer * 3] = currentNorm.x;
+		normalsArray[currentVertexPointer * 3 + 1] = currentNorm.y;
+		normalsArray[currentVertexPointer * 3 + 2] = currentNorm.z;
 
 	}
 

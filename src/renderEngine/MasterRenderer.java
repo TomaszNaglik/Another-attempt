@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.joml.*;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -14,8 +15,8 @@ import entities.Camera;
 import entities.Entity;
 import entities.Light;
 import math.Maths;
-import math.Matrix4f;
-import math.Vector3f;
+//import math.Matrix4f;
+//import math.Vector3f;
 import models.TexturedModel;
 import shaders.StaticShader;
 import shaders.TerrainShader;
@@ -27,9 +28,9 @@ public class MasterRenderer {
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 10000;
 
-	private static final float RED = 0;// 135.0f/255.0f;
-	private static final float GREEN = 0;// 206.0f/255.0f;
-	private static final float BLUE = 0;// 250.0f/255.0f;
+	private static final float RED =  135.0f/255.0f;
+	private static final float GREEN =  206.0f/255.0f;
+	private static final float BLUE =  250.0f/255.0f;
 
 	private static float density = 0.0000f;
 	private static float gradient = 5.0f;

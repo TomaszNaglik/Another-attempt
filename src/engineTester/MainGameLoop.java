@@ -2,14 +2,14 @@ package engineTester;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import org.joml.*;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
 import entities.Player;
 import input.Input;
-import math.Quaternion;
-import math.Vector3f;
+//import math.Quaternion;
+//import math.Vector3f;
 import models.RawModel;
 import models.TexturedModel;
 import objConverter.ModelData;
@@ -27,7 +27,7 @@ public class MainGameLoop {
 		Loader loader = new Loader();
 
 		Vector3f standardScale = new Vector3f(1, 1, 1);
-		Quaternion standardRotation = new Quaternion(0, 0, 0, 1);
+		Quaternionf standardRotation = new Quaternionf(0, 0, 0, 1);
 
 		TexturedModel dragonModel = new TexturedModel(OBJFileLoader.loadOBJ("dragon", loader),
 				new ModelTexture(loader.loadTexture("white")));

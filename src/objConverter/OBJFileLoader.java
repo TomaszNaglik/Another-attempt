@@ -8,8 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joml.*;
+
 import math.*;
 import models.RawModel;
+//import redundant.Vector2f;
+//import redundant.Vector3f;
 import renderEngine.Loader;
 
 public class OBJFileLoader {
@@ -111,14 +115,14 @@ public class OBJFileLoader {
 			Vector3f position = currentVertex.getPosition();
 			Vector2f textureCoord = textures.get(currentVertex.getTextureIndex());
 			Vector3f normalVector = normals.get(currentVertex.getNormalIndex());
-			verticesArray[i * 3] = position.GetX();
-			verticesArray[i * 3 + 1] = position.GetY();
-			verticesArray[i * 3 + 2] = position.GetZ();
-			texturesArray[i * 2] = textureCoord.GetX();
-			texturesArray[i * 2 + 1] = 1 - textureCoord.GetY();
-			normalsArray[i * 3] = normalVector.GetX();
-			normalsArray[i * 3 + 1] = normalVector.GetY();
-			normalsArray[i * 3 + 2] = normalVector.GetZ();
+			verticesArray[i * 3] = position.x;
+			verticesArray[i * 3 + 1] = position.y;
+			verticesArray[i * 3 + 2] = position.z;
+			texturesArray[i * 2] = textureCoord.y;
+			texturesArray[i * 2 + 1] = 1 - textureCoord.y;
+			normalsArray[i * 3] = normalVector.x;
+			normalsArray[i * 3 + 1] = normalVector.y;
+			normalsArray[i * 3 + 2] = normalVector.z;
 		}
 		return furthestPoint;
 	}

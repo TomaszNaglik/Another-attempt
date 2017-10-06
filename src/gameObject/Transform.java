@@ -1,31 +1,43 @@
 package gameObject;
 
-import math.*;
+import org.joml.*;
+
+import math.Maths;
+//import org.lwjgl.util.vector.Vector3f;
+
+//import math.*;
 
 public class Transform {
 
 	private Vector3f m_pos;
-	private Quaternion m_rot;
+	private Quaternionf m_rot;
 	private Vector3f m_scale;
 
 	private Vector3f m_oldPos;
-	private Quaternion m_oldRot;
+	private Quaternionf m_oldRot;
 	private Vector3f m_oldScale;
+	
+	private Vector3f right;
+	private Vector3f up;
+	private Vector3f forward;
 
 	private Transform m_parent;
 	private Matrix4f m_parentMatrix;
 
 	public Transform() {
 		m_pos = new Vector3f(0, 0, 0);
-		m_rot = new Quaternion(0, 0, 0, 1);
+		m_rot = new Quaternionf(0, 0, 0, 1);
 		m_scale = new Vector3f(1, 1, 1);
+		right = new Vector3f(1, 0, 0);
+		up = new Vector3f(0, 1, 0);
+		forward = new Vector3f(0, 0, 1);
 
-		m_parentMatrix = new Matrix4f().InitIdentity();
+		m_parentMatrix = new Matrix4f();
 	}
 
 	public void Rotate(Vector3f axis, float angle) {
 
-		m_rot = new Quaternion(axis, angle).Mul(m_rot).Normalized();
+		m_rot.rotateAxis(angle, axis);
 	}
 
 	public boolean HasChanged() {
@@ -45,11 +57,7 @@ public class Transform {
 	}
 
 	public Matrix4f GetTransformation() {
-		Matrix4f translationMatrix = new Matrix4f().InitTranslation(m_pos.GetX(), m_pos.GetY(), m_pos.GetZ());
-		Matrix4f rotationMatrix = m_rot.ToRotationMatrix();
-		Matrix4f scaleMatrix = new Matrix4f().InitScale(m_scale.GetX(), m_scale.GetY(), m_scale.GetZ());
-
-		return GetParentMatrix().Mul(translationMatrix.Mul(rotationMatrix.Mul(scaleMatrix)));
+		return Maths.createTransformationMatrix(this);
 	}
 
 	private Matrix4f GetParentMatrix() {
@@ -63,18 +71,18 @@ public class Transform {
 		this.m_parent = parent;
 	}
 
-	public Vector3f GetTransformedPos() {
+	/*public Vector3f GetTransformedPos() {
 		return GetParentMatrix().Transform(m_pos);
-	}
+	}*/
 
-	public Quaternion GetTransformedRot() {
+	/*public Quaternion GetTransformedRot() {
 		Quaternion parentRotation = new Quaternion(0, 0, 0, 1);
 
 		if (m_parent != null)
 			parentRotation = m_parent.GetTransformedRot();
 
 		return parentRotation.Mul(m_rot);
-	}
+	}*/
 
 	public Vector3f GetPos() {
 		return m_pos;
@@ -84,11 +92,11 @@ public class Transform {
 		this.m_pos = pos;
 	}
 
-	public Quaternion GetRot() {
+	public Quaternionf GetRot() {
 		return m_rot;
 	}
 
-	public void SetRot(Quaternion rotation) {
+	public void SetRot(Quaternionf rotation) {
 		this.m_rot = rotation;
 	}
 
@@ -104,5 +112,18 @@ public class Transform {
 		this.m_scale = new Vector3f(scale, scale, scale);
 
 	}
+
+	public Vector3f GetRightAxis() {
+		m_rot.positiveX(right);
+		return right;
+	}
+	public Vector3f GetUpAxis() {
+		m_rot.positiveY(up);
+		return up;
+	}
+	public Vector3f GetForwardAxis() {
+	m_rot.positiveY(forward);
+	return forward;
+}
 
 }

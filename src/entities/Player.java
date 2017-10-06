@@ -1,8 +1,8 @@
 package entities;
-
+import org.joml.*;
 import input.Input;
-import math.Quaternion;
-import math.Vector3f;
+//import math.Quaternion;
+//import math.Vector3f;
 import models.TexturedModel;
 import renderEngine.DisplayManager;
 import renderEngine.MasterRenderer;
@@ -24,7 +24,7 @@ public class Player extends Entity {
 
 	// private Transform transform;
 
-	public Player(TexturedModel model, Vector3f position, Quaternion rotation, Vector3f scale) {
+	public Player(TexturedModel model, Vector3f position, Quaternionf rotation, Vector3f scale) {
 		super(model, position, rotation, scale);
 
 	}
@@ -32,16 +32,16 @@ public class Player extends Entity {
 	public void update() {
 
 		if (Input.GetKey(Input.KEY_W)) {
-			transform.SetPos(transform.GetPos().Add(new Vector3f(1, 0, 0)));
+			transform.SetPos(transform.GetPos().add(new Vector3f(1, 0, 0)));
 		}
 		if (Input.GetKey(Input.KEY_S)) {
-			transform.SetPos(transform.GetPos().Add(new Vector3f(-1, 0, 0)));
+			transform.SetPos(transform.GetPos().add(new Vector3f(-1, 0, 0)));
 		}
 		if (Input.GetKey(Input.KEY_A)) {
-			transform.SetPos(transform.GetPos().Add(new Vector3f(0, 0, -1)));
+			transform.SetPos(transform.GetPos().add(new Vector3f(0, 0, -1)));
 		}
 		if (Input.GetKey(Input.KEY_D)) {
-			transform.SetPos(transform.GetPos().Add(new Vector3f(0, 0, 1)));
+			transform.SetPos(transform.GetPos().add(new Vector3f(0, 0, 1)));
 		}
 
 		/*

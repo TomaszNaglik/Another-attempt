@@ -1,6 +1,8 @@
 package objConverter;
 
-import math.Vector3f;
+import org.joml.Vector3f;
+
+//import redundant.Vector3f;
 
 //import org.lwjgl.util.vector.Vector3f;
 
@@ -18,7 +20,7 @@ public class Vertex {
 	public Vertex(int index, Vector3f vertex) {
 		this.index = index;
 		this.position = vertex;
-		this.length = vertex.Length();
+		this.length = vertex.length();
 	}
 
 	public int getIndex() {

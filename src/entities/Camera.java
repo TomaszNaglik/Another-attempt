@@ -1,10 +1,12 @@
 package entities;
+import org.joml.*;
+import org.joml.Math;
 
 import gameObject.GameObject;
 import input.Input;
-import math.Quaternion;
-import math.Vector2f;
-import math.Vector3f;
+//import math.Quaternion;
+//import math.Vector2f;
+//import math.Vector3f;
 import renderEngine.DisplayManager;
 import renderEngine.MasterRenderer;
 
@@ -27,12 +29,9 @@ public class Camera extends GameObject {
 	private boolean locked = false;
 	private float sensitivity = 15.0f;
 
-	public Camera(Vector3f position, Quaternion rotation, Vector3f scale) {
+	public Camera(Vector3f position, Quaternionf rotation, Vector3f scale) {
 		super(position, rotation, scale);
 
-		// Vector3f.sub (position, target, direction);
-		// Vector3f.cross(up, direction, right);
-		// Vector3f.cross(direction, right, up);
 	}
 
 	public void update()
@@ -48,28 +47,19 @@ public class Camera extends GameObject {
 		Vector2f centerPosition = new Vector2f(DisplayManager.getWidth() / 2, DisplayManager.getHeigth() / 2);
 
 		if (Input.GetKey(Input.KEY_UP)) {
-			transform.SetPos(transform.GetPos().Add(new Vector3f(1, 0, 0)));
+			transform.SetPos(transform.GetPos().add(new Vector3f(1, 0, 0)));
 		}
 		if (Input.GetKey(Input.KEY_DOWN)) {
-			transform.SetPos(transform.GetPos().Add(new Vector3f(-1, 0, 0)));
+			transform.SetPos(transform.GetPos().add(new Vector3f(-1, 0, 0)));
 		}
 		if (Input.GetKey(Input.KEY_LEFT)) {
-			transform.SetPos(transform.GetPos().Add(new Vector3f(0, 0, 1)));
+			transform.SetPos(transform.GetPos().add(new Vector3f(0, 0, 1)));
 		}
 		if (Input.GetKey(Input.KEY_RIGHT)) {
-			transform.SetPos(transform.GetPos().Add(new Vector3f(0, 0, -1)));
+			transform.SetPos(transform.GetPos().add(new Vector3f(0, 0, -1)));
 		}
 
-		/*
-		 * if(Input.GetKey(Input.KEY_UP)) {
-		 * 
-		 * Vector3f.sub(position, direction, position); //Vector3f.add(position,
-		 * direction, position); } if(Input.GetKey(Input.KEY_DOWN)) {
-		 * Vector3f.add(position, direction, position); //Vector3f.sub(direction ,
-		 * position , position); } if(Input.GetKey(Input.KEY_RIGHT)) {
-		 * position.GetX().Add+=cameraSpeed; } if(Input.GetKey(Input.KEY_LEFT)) {
-		 * position.x-=cameraSpeed; }
-		 */
+		
 		if (Input.GetMouse(0)) {
 			Input.SetCursor(false);
 			Input.SetMousePosition(centerPosition);
@@ -81,29 +71,22 @@ public class Camera extends GameObject {
 
 		if (locked) {
 			Vector2f deltaPos = new Vector2f(0, 0);
-			deltaPos = centerPosition.Sub(Input.GetMousePosition());
+			deltaPos = centerPosition.sub(Input.GetMousePosition());
 
-			boolean rotY = deltaPos.GetX() != 0;
-			boolean rotX = deltaPos.GetY() != 0;
+			boolean rotY = deltaPos.x != 0;
+			boolean rotX = deltaPos.y != 0;
 
 			if (rotY)
-				getTransform().Rotate(Y_AXIS, (float) Math.toRadians(deltaPos.GetX() * sensitivity));
+				getTransform().Rotate(Y_AXIS, (float) Math.toRadians(deltaPos.x * sensitivity));
 			if (rotX)
-				getTransform().Rotate(getTransform().GetRot().GetRight(),
-						(float) Math.toRadians(-deltaPos.GetY() * sensitivity));
+				getTransform().Rotate(getTransform().GetRightAxis(),(float) Math.toRadians(deltaPos.y * sensitivity *1));
 
 			if (rotY || rotX)
 				Input.SetMousePosition(centerPosition);
 
-			/*
-			 * if(rotY) yaw += (float) Math.toRadians(deltaPos.GetX() * sensitivity);
-			 * if(rotX) pitch += (float) Math.toRadians(-deltaPos.GetY() * sensitivity);
-			 * 
-			 * if(rotY || rotX) Input.SetMousePosition(centerPosition);
-			 */
-
+			
 		}
-		// updateDirection();
+		
 
 	}
 
@@ -127,20 +110,7 @@ public class Camera extends GameObject {
 		return direction;
 	}
 
-	private void updateDirection() {
-		double beta = -Math.toRadians(yaw);
-		double alpha = Math.toRadians(pitch);
-
-		float x = (float) (Math.cos(alpha) * Math.cos(beta));
-		float z = (float) (Math.sin(alpha) * Math.cos(beta));
-		float y = (float) Math.sin(beta);
-
-		/*
-		 * direction.setX(y); direction.setY(z); direction.setZ(x);
-		 * direction.normalise(); direction.scale(cameraSpeed);
-		 */
-
-	}
+	
 
 	public void setDirection(Vector3f direction) {
 		this.direction = direction;

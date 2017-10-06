@@ -9,8 +9,11 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
-import math.Matrix4f;
-import math.Vector3f;
+import math.Maths;
+
+import org.joml.*;
+//import math.Matrix4f;
+//import math.Vector3f;
 
 public abstract class ShaderProgram {
 	private int programID;
@@ -75,11 +78,11 @@ public abstract class ShaderProgram {
 
 	protected void loadMatrix(int location, Matrix4f matrix) {
 
-		GL20.glUniformMatrix4(location, false, Matrix4f.CreateFlippedBuffer(matrix));
+		GL20.glUniformMatrix4(location, false, Maths.CreateFlippedBuffer(matrix));
 	}
 
 	protected void loadVector(int location, Vector3f vector) {
-		GL20.glUniform3f(location, vector.GetX(), vector.GetY(), vector.GetZ());
+		GL20.glUniform3f(location, vector.x, vector.y, vector.z);
 	}
 
 	protected void loadInt(int location, int value) {

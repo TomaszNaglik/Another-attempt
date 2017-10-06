@@ -1,8 +1,8 @@
 package entities;
-
+import org.joml.*;
 import gameObject.GameObject;
-import math.Quaternion;
-import math.Vector3f;
+//import math.Quaternion;
+//import math.Vector3f;
 import models.TexturedModel;
 
 public class Entity extends GameObject {
@@ -12,18 +12,18 @@ public class Entity extends GameObject {
 	private float rotX, rotY, rotZ;
 	private float scale;
 
-	public Entity(TexturedModel model, Vector3f position, Quaternion rotation, Vector3f scale) {
+	public Entity(TexturedModel model, Vector3f position, Quaternionf rotation, Vector3f scale) {
 		super(position, rotation, scale);
 		this.model = model;
 
 	}
 
 	public void increasePosition(Vector3f change) {
-		transform.GetPos().Add(change);
+		transform.GetPos().add(change);
 	}
 
-	public void increaseRotation(Quaternion change) {
-		transform.GetRot().Add(change);
+	public void increaseRotation(Quaternionf change) {
+		transform.GetRot().add(change);
 	}
 
 	public TexturedModel getModel() {

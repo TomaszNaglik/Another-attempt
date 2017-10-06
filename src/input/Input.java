@@ -3,7 +3,7 @@ package input;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import math.Vector2f;
+import org.joml.*;
 
 public class Input {
 	public static final int NUM_KEYCODES = 256;
@@ -180,7 +180,7 @@ public class Input {
 	}
 
 	public static void SetMousePosition(Vector2f pos) {
-		Mouse.setCursorPosition((int) pos.GetX(), (int) pos.GetY());
+		Mouse.setCursorPosition((int) pos.x, (int) pos.y);
 	}
 
 	public static void SetCursor(boolean enabled) {

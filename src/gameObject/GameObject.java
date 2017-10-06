@@ -1,12 +1,12 @@
 package gameObject;
-
-import math.Quaternion;
-import math.Vector3f;
+import org.joml.*;
+//import math.Quaternion;
+//import math.Vector3f;
 
 public class GameObject {
 	protected Transform transform;
 
-	public GameObject(Vector3f position, Quaternion rotation, Vector3f scale) {
+	public GameObject(Vector3f position, Quaternionf rotation, Vector3f scale) {
 		transform = new Transform();
 		transform.SetPos(position);
 		transform.SetRot(rotation);
