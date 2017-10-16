@@ -1,6 +1,7 @@
 package gameObject;
 
 import org.joml.*;
+import org.joml.Math;
 
 import math.Maths;
 //import org.lwjgl.util.vector.Vector3f;
@@ -9,121 +10,147 @@ import math.Maths;
 
 public class Transform {
 
-	private Vector3f m_pos;
-	private Quaternionf m_rot;
-	private Vector3f m_scale;
+	private Vector3f position;
+	private Quaternionf rotation;
+	private Vector3f scale;
 
-	private Vector3f m_oldPos;
-	private Quaternionf m_oldRot;
-	private Vector3f m_oldScale;
-	
 	private Vector3f right;
 	private Vector3f up;
 	private Vector3f forward;
 
-	private Transform m_parent;
-	private Matrix4f m_parentMatrix;
+	
 
 	public Transform() {
-		m_pos = new Vector3f(0, 0, 0);
-		m_rot = new Quaternionf(0, 0, 0, 1);
-		m_scale = new Vector3f(1, 1, 1);
-		right = new Vector3f(1, 0, 0);
-		up = new Vector3f(0, 1, 0);
-		forward = new Vector3f(0, 0, 1);
+		position = new Vector3f(0, 0, 0);
+		rotation = new Quaternionf(0, 0, 0, 1);
+		scale = new Vector3f(1, 1, 1);
+		
+		right = new Vector3f();
+		up = new Vector3f();
+		forward = new Vector3f();
+		
+		calcRightAxis();
+		calcForwardAxis();
+		calcUpAxis();
 
-		m_parentMatrix = new Matrix4f();
 	}
+	
+
 
 	public void Rotate(Vector3f axis, float angle) {
-
-		m_rot.rotateAxis(angle, axis);
-	}
-
-	public boolean HasChanged() {
-		if (m_parent != null && m_parent.HasChanged())
-			return true;
-
-		if (!m_pos.equals(m_oldPos))
-			return true;
-
-		if (!m_rot.equals(m_oldRot))
-			return true;
-
-		if (!m_scale.equals(m_oldScale))
-			return true;
-
-		return false;
+		rotation.rotateAxis(angle, axis);
+		calcForwardAxis();
+		calcRightAxis();
+		calcUpAxis();
 	}
 
 	public Matrix4f GetTransformation() {
 		return Maths.createTransformationMatrix(this);
 	}
 
-	private Matrix4f GetParentMatrix() {
-		if (m_parent != null && m_parent.HasChanged())
-			m_parentMatrix = m_parent.GetTransformation();
-
-		return m_parentMatrix;
-	}
-
-	public void SetParent(Transform parent) {
-		this.m_parent = parent;
-	}
-
-	/*public Vector3f GetTransformedPos() {
-		return GetParentMatrix().Transform(m_pos);
-	}*/
-
-	/*public Quaternion GetTransformedRot() {
-		Quaternion parentRotation = new Quaternion(0, 0, 0, 1);
-
-		if (m_parent != null)
-			parentRotation = m_parent.GetTransformedRot();
-
-		return parentRotation.Mul(m_rot);
-	}*/
-
 	public Vector3f GetPos() {
-		return m_pos;
+		return position;
 	}
 
 	public void SetPos(Vector3f pos) {
-		this.m_pos = pos;
+		this.position = pos;
 	}
 
 	public Quaternionf GetRot() {
-		return m_rot;
+		return rotation;
 	}
 
 	public void SetRot(Quaternionf rotation) {
-		this.m_rot = rotation;
+		this.rotation = rotation;
 	}
 
 	public Vector3f GetScale() {
-		return m_scale;
+		return scale;
 	}
 
 	public void SetScale(Vector3f scale) {
-		this.m_scale = scale;
+		this.scale = scale;
 	}
 
 	public void SetScale(float scale) {
-		this.m_scale = new Vector3f(scale, scale, scale);
+		SetScale( new Vector3f(scale, scale, scale));
 
 	}
 
-	public Vector3f GetRightAxis() {
-		m_rot.positiveX(right);
+	public void calcRightAxis() {
+		right = calcOwnRight();
+	}
+	
+
+	public void calcUpAxis() {
+		up = calcOwnUp();
+	}
+	
+
+
+
+	public void calcForwardAxis() {
+		//rotation.normalizedPositiveX(forward);
+		forward = calcOwnForward();
+	}
+
+	public Vector3f getRight() {
 		return right;
 	}
-	public Vector3f GetUpAxis() {
-		m_rot.positiveY(up);
+
+
+
+	public Vector3f getUp() {
 		return up;
 	}
-	public Vector3f GetForwardAxis() {
-	m_rot.positiveY(forward);
-	return forward;
-}
+
+
+
+	public Vector3f getForward() {
+		return forward;
+	}
+
+
+
+	public void move(Vector3f direction, float amount) {
+		Vector3f newDirection = new Vector3f(direction);
+		newDirection.normalize();
+		newDirection.mul(amount);
+		this.position.add(newDirection);
+		
+	}
+	
+	public String Vec3ToString(Vector3f v) {
+		float x = (float)v.x;
+		float y = (float)v.y;
+		float z = (float)v.z;
+		return String.valueOf(x)+" "+ String.valueOf(y) +" "+ String.valueOf(z);
+	}
+	
+	private Vector3f calcOwnForward() {
+		Vector3f r = new Vector3f();
+		r.x = 2 * (rotation.x*rotation.z + rotation.w*rotation.y);
+		r.y = 2 * (rotation.y*rotation.z - rotation.w*rotation.x);
+		r.z = 1 - 2 * (rotation.x*rotation.x + rotation.y*rotation.y);
+		
+		return r;
+	}
+	
+	private Vector3f calcOwnRight() {
+		Vector3f r = new Vector3f();
+		r.x = 1 - 2 * (rotation.y*rotation.y + rotation.z*rotation.z);
+		r.y = 2 * (rotation.x*rotation.y + rotation.w*rotation.z);
+		r.z = 2 * (rotation.x*rotation.z - rotation.w*rotation.y);
+		return r.mul(-1);
+	}
+
+	private Vector3f calcOwnUp() {
+		Vector3f r = new Vector3f();
+		r.x = 2 * (rotation.x*rotation.y - rotation.w*rotation.z);
+		r.y = 1 - 2 * (rotation.x*rotation.x + rotation.z*rotation.z);
+		r.z = 2 * (rotation.y*rotation.z + rotation.w*rotation.x);
+		
+		return r;
+	}
 
 }

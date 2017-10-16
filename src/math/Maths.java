@@ -20,9 +20,9 @@ public class Maths
 	{
 		Matrix4f transformationMatrix = new Matrix4f();
 		transformationMatrix.scale(transform.GetScale());
-		transformationMatrix.rotate(transform.GetRot());
-		transformationMatrix.translate(transform.GetPos());
 		
+		transformationMatrix.translate(transform.GetPos());
+		transformationMatrix.rotate(transform.GetRot());
 
 		return transformationMatrix;
 	}
@@ -32,8 +32,9 @@ public class Maths
 		
 		Matrix4f viewMatrix = new Matrix4f();
 		viewMatrix.rotate(camera.getTransform().GetRot());
-		viewMatrix.translate(camera.getPosition());
-
+		viewMatrix.translate(camera.getTransform().GetPos());
+		//viewMatrix.lookAt(camera.getTransform().GetPos(), camera.getTransform().getUp(),camera.getTransform().getRight().mul(1));
+		//viewMatrix.
 		return viewMatrix;
 		
 		
@@ -45,6 +46,7 @@ public class Maths
 	
 	public static FloatBuffer CreateFlippedBuffer(Matrix4f matrix) {
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(4 * 4);
+		
 		return matrix.get(buffer);
 	}
 }

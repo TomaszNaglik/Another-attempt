@@ -10,7 +10,7 @@ import renderEngine.MasterRenderer;
 public class Player extends Entity {
 
 	private float movementSpeed = 1f;
-	private float rotationSpeed = 1f;
+	private float rotationSpeed = 0.01f;
 
 	private float pitch;
 	private float yaw;
@@ -32,57 +32,57 @@ public class Player extends Entity {
 	public void update() {
 
 		if (Input.GetKey(Input.KEY_W)) {
-			transform.SetPos(transform.GetPos().add(new Vector3f(1, 0, 0)));
+			transform.move(transform.getForward(), movementSpeed);
+			//transform.SetPos(transform.GetPos().add(new Vector3f(-1, 0, 0)));
 		}
 		if (Input.GetKey(Input.KEY_S)) {
-			transform.SetPos(transform.GetPos().add(new Vector3f(-1, 0, 0)));
+			//transform.SetPos(transform.GetPos().add(new Vector3f(1, 0, 0)));
+			transform.move(transform.getForward(), -movementSpeed);
 		}
 		if (Input.GetKey(Input.KEY_A)) {
-			transform.SetPos(transform.GetPos().add(new Vector3f(0, 0, -1)));
+			//transform.SetPos(transform.GetPos().add(new Vector3f(0, 0, 1)));
+			transform.move(transform.getRight(), -movementSpeed);
 		}
 		if (Input.GetKey(Input.KEY_D)) {
-			transform.SetPos(transform.GetPos().add(new Vector3f(0, 0, 1)));
+			//transform.SetPos(transform.GetPos().add(new Vector3f(0, 0, -1)));
+			transform.move(transform.getRight(), movementSpeed);
+		}
+		
+	
+		if (Input.GetKey(Input.KEY_Z)) {
+			transform.move(transform.getUp(), movementSpeed);
+			//transform.SetPos(transform.GetPos().add(new Vector3f(0, 1, 0)));
+		}
+		if (Input.GetKey(Input.KEY_C)) {
+			transform.move(transform.getUp(), -movementSpeed);
+			//transform.SetPos(transform.GetPos().add(new Vector3f(0, -1, 0)));
+		}
+			
+		if (Input.GetKey(Input.KEY_T)) {
+			transform.Rotate( new Vector3f(1,0,0), rotationSpeed);
+		}
+		if (Input.GetKey(Input.KEY_G)) {
+			transform.Rotate( new Vector3f(1,0,0), -rotationSpeed);
+		}
+		if (Input.GetKey(Input.KEY_Y)) {
+			transform.Rotate( new Vector3f(0,1,0), rotationSpeed);
+		}
+		if (Input.GetKey(Input.KEY_H)) {
+			transform.Rotate( new Vector3f(0,1,0), -rotationSpeed);
+		}
+		if (Input.GetKey(Input.KEY_U)) {
+			transform.Rotate( new Vector3f(0,0,1), rotationSpeed);
+		}
+		if (Input.GetKey(Input.KEY_J)) {
+			transform.Rotate( new Vector3f(0,0,1), -rotationSpeed);
+		}
+		if (Input.GetKey(Input.KEY_P)) {
+			transform.SetPos(new Vector3f(0,0,0));
 		}
 
-		/*
-		 * updateVectors();
-		 * 
-		 * if(Input.GetKey(Input.KEY_W)){
-		 * this.increasePosition(direction.x*movementSpeed, direction.y*movementSpeed,
-		 * direction.z*movementSpeed); } if(Input.GetKey(Input.KEY_S)){
-		 * this.increasePosition(-direction.x*movementSpeed, -direction.y*movementSpeed,
-		 * -direction.z*movementSpeed); } if(Input.GetKey(Input.KEY_A)){
-		 * this.increasePosition(-right.x*movementSpeed, -right.y*movementSpeed,
-		 * -right.z*movementSpeed); } if(Input.GetKey(Input.KEY_D)){
-		 * this.increasePosition(right.x*movementSpeed, right.y*movementSpeed,
-		 * right.z*movementSpeed); }
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * if(yaw >= 180) yaw = -180; if(yaw < -180) yaw = 180; if(pitch >= 180) pitch =
-		 * -180; if(pitch < -180) pitch = 180; if(roll >= 180) roll = -180; if(roll <
-		 * -180) roll = 180; if(position.getY()<3) position.setY(3.0f);
-		 * 
-		 */
+		
 
 	}
 
-	private void updateVectors() {/*
-									 * double beta = Math.toRadians(yaw); double alpha = Math.toRadians(pitch);
-									 * 
-									 * float x = (float)(Math.cos(alpha)*Math.cos(beta)); float z =
-									 * (float)(Math.sin(alpha)*Math.cos(beta)); float y = (float) Math.sin(beta);
-									 * 
-									 * target.setX(y); target.setY(z); target.setZ(x);
-									 * 
-									 * 
-									 * Vector3f.sub (position, target, direction); Vector3f.cross(up, direction,
-									 * right); Vector3f.cross(direction, right, up);
-									 * 
-									 * direction.normalise(); right.normalise(); up.normalise(); target.normalise();
-									 */
-	}
-
+	
 }

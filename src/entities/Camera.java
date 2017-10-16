@@ -3,6 +3,7 @@ import org.joml.*;
 import org.joml.Math;
 
 import gameObject.GameObject;
+import gameObject.Transform;
 import input.Input;
 //import math.Quaternion;
 //import math.Vector2f;
@@ -27,38 +28,43 @@ public class Camera extends GameObject {
 	private float rotationSpeed = 1.0f;
 
 	private boolean locked = false;
-	private float sensitivity = 15.0f;
+	private float sensitivity = 1.1f;
 
 	public Camera(Vector3f position, Quaternionf rotation, Vector3f scale) {
 		super(position, rotation, scale);
 
 	}
-
-	public void update()
-
-	{
-
+	
+	
+	
+	public void keyBoardUpdate() {
 		if (Input.GetKey(Input.KEY_K)) {
 			MasterRenderer.setDensity(MasterRenderer.getDensity() + 0.00005f);
 		}
 		if (Input.GetKey(Input.KEY_L)) {
 			MasterRenderer.setDensity(MasterRenderer.getDensity() - 0.00005f);
 		}
-		Vector2f centerPosition = new Vector2f(DisplayManager.getWidth() / 2, DisplayManager.getHeigth() / 2);
-
 		if (Input.GetKey(Input.KEY_UP)) {
-			transform.SetPos(transform.GetPos().add(new Vector3f(1, 0, 0)));
+			transform.move(transform.getForward(), cameraSpeed);	
 		}
 		if (Input.GetKey(Input.KEY_DOWN)) {
-			transform.SetPos(transform.GetPos().add(new Vector3f(-1, 0, 0)));
+			transform.move(transform.getForward(), -cameraSpeed);	
 		}
 		if (Input.GetKey(Input.KEY_LEFT)) {
-			transform.SetPos(transform.GetPos().add(new Vector3f(0, 0, 1)));
+			transform.move(transform.getRight(), -cameraSpeed);
 		}
 		if (Input.GetKey(Input.KEY_RIGHT)) {
-			transform.SetPos(transform.GetPos().add(new Vector3f(0, 0, -1)));
+			transform.move(transform.getRight(), cameraSpeed);
 		}
-
+		if (Input.GetKey(Input.KEY_N)) {
+			transform.Rotate(new Vector3f(1,0,0),   (float) Math.toRadians(rotationSpeed * sensitivity));	
+		}
+		if (Input.GetKey(Input.KEY_M)) {
+			transform.Rotate(new Vector3f(1,0,0),   (float) Math.toRadians(-rotationSpeed * sensitivity));	
+		}
+	}
+	public void mouseUpdate() {
+		Vector2f centerPosition = new Vector2f(DisplayManager.getWidth() / 2, DisplayManager.getHeigth() / 2);
 		
 		if (Input.GetMouse(0)) {
 			Input.SetCursor(false);
@@ -70,79 +76,36 @@ public class Camera extends GameObject {
 		}
 
 		if (locked) {
-			Vector2f deltaPos = new Vector2f(0, 0);
-			deltaPos = centerPosition.sub(Input.GetMousePosition());
-
+			
+			Vector2f mousePos = Input.GetMousePosition();
+			Vector2f deltaPos = centerPosition;
+			deltaPos.sub(mousePos);
+			
 			boolean rotY = deltaPos.x != 0;
 			boolean rotX = deltaPos.y != 0;
-
+			System.out.println(deltaPos.x);
 			if (rotY)
-				getTransform().Rotate(Y_AXIS, (float) Math.toRadians(deltaPos.x * sensitivity));
+				transform.Rotate(transform.getUp(),   (float) Math.toRadians(deltaPos.x * sensitivity));
 			if (rotX)
-				getTransform().Rotate(getTransform().GetRightAxis(),(float) Math.toRadians(deltaPos.y * sensitivity *1));
+				transform.Rotate(transform.getRight(),(float) Math.toRadians(deltaPos.y * sensitivity *-1));
 
 			if (rotY || rotX)
 				Input.SetMousePosition(centerPosition);
-
-			
 		}
+	}
+
+	public void update()
+
+	{
 		
-
-	}
-
-	public Vector3f getPosition() {
-		return position;
-	}
-
-	public float getPitch() {
-		return pitch;
-	}
-
-	public float getYaw() {
-		return yaw;
-	}
-
-	public float getRoll() {
-		return roll;
-	}
-
-	public Vector3f getDirection() {
-		return direction;
+		keyBoardUpdate();
+		mouseUpdate();
 	}
 
 	
-
-	public void setDirection(Vector3f direction) {
-		this.direction = direction;
-	}
-
-	public Vector3f getRight() {
-		return right;
-	}
-
-	public void setRight(Vector3f right) {
-		this.right = right;
-	}
-
-	public Vector3f getUp() {
-		return up;
-	}
-
-	public void setUp(Vector3f up) {
-		this.up = up;
-	}
-
 	@Override
 	public void printoutDirection() {
-		System.out.print("C: " + transform.GetPos().toString() + "R : " + transform.GetRot().toString());// +" Direction
-																											// :
-																											// "+direction.toString()+
-																											// " Pitch:
-																											// "+pitch+"
-																											// Yaw:
-																											// "+yaw+"
-																											// Roll:
-																											// "+roll);
+		System.out.print("C: " + transform.GetPos().toString() + "R : " + transform.GetRot().toString());
 	}
 
 }

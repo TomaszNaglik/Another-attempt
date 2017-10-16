@@ -16,6 +16,10 @@ public class GameObject {
 	public Transform getTransform() {
 		return transform;
 	}
+	
+	public void setTransform (Transform t) {
+		this.transform = t;
+	}
 
 	public void printoutDirection() {
 		System.out.print("P: " + transform.GetPos().toString());
