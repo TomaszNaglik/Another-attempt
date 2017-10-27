@@ -13,17 +13,6 @@ import renderEngine.MasterRenderer;
 
 public class Camera extends GameObject {
 
-	private static final Vector3f Y_AXIS = new Vector3f(0, 1, 0);
-	private Vector3f position = new Vector3f(0, 55, 0);
-	private Vector3f target = new Vector3f(1, 5, 0);
-	private Vector3f direction = new Vector3f(0, 0, 0);
-
-	private Vector3f right = new Vector3f(0, 0, 0);
-	private Vector3f up = new Vector3f(0, 1, 0);
-	private float pitch;
-	private float yaw;
-	private float roll;
-
 	private float cameraSpeed = 5.0f;
 	private float rotationSpeed = 1.0f;
 
@@ -38,12 +27,12 @@ public class Camera extends GameObject {
 	
 	
 	public void keyBoardUpdate() {
-		if (Input.GetKey(Input.KEY_K)) {
-			MasterRenderer.setDensity(MasterRenderer.getDensity() + 0.00005f);
-		}
-		if (Input.GetKey(Input.KEY_L)) {
-			MasterRenderer.setDensity(MasterRenderer.getDensity() - 0.00005f);
-		}
+//		if (Input.GetKey(Input.KEY_K)) {
+//			MasterRenderer.setDensity(MasterRenderer.getDensity() + 0.00005f);
+//		}
+//		if (Input.GetKey(Input.KEY_L)) {
+//			MasterRenderer.setDensity(MasterRenderer.getDensity() - 0.00005f);
+//		}
 		if (Input.GetKey(Input.KEY_UP)) {
 			transform.move(transform.getForward(), cameraSpeed);	
 		}
@@ -57,10 +46,26 @@ public class Camera extends GameObject {
 			transform.move(transform.getRight(), cameraSpeed);
 		}
 		if (Input.GetKey(Input.KEY_N)) {
-			transform.Rotate(new Vector3f(1,0,0),   (float) Math.toRadians(rotationSpeed * sensitivity));	
+			transform.Rotate(new Vector3f(1,0,0),   (float) Math.toRadians(rotationSpeed * sensitivity));
+			
 		}
 		if (Input.GetKey(Input.KEY_M)) {
 			transform.Rotate(new Vector3f(1,0,0),   (float) Math.toRadians(-rotationSpeed * sensitivity));	
+			
+		}
+		if (Input.GetKey(Input.KEY_J)) {
+			transform.Rotate(new Vector3f(0,1,0),   (float) Math.toRadians(rotationSpeed * sensitivity));	
+			
+		}
+		if (Input.GetKey(Input.KEY_K)) {
+			transform.Rotate(new Vector3f(0,1,0),   (float) Math.toRadians(-rotationSpeed * sensitivity));	
+			
+		}
+		if (Input.GetKey(Input.KEY_I)) {
+			transform.Rotate(new Vector3f(0,0,1),   (float) Math.toRadians(rotationSpeed * sensitivity));	
+		}
+		if (Input.GetKey(Input.KEY_O)) {
+			transform.Rotate(new Vector3f(0,0,1),   (float) Math.toRadians(-rotationSpeed * sensitivity));	
 		}
 	}
 	public void mouseUpdate() {
@@ -78,16 +83,16 @@ public class Camera extends GameObject {
 		if (locked) {
 			
 			Vector2f mousePos = Input.GetMousePosition();
-			Vector2f deltaPos = centerPosition;
-			deltaPos.sub(mousePos);
+			Vector2f deltaPos = mousePos.sub(centerPosition);
+			//deltaPos.sub(mousePos);
 			
 			boolean rotY = deltaPos.x != 0;
 			boolean rotX = deltaPos.y != 0;
-			System.out.println(deltaPos.x);
+			//System.out.println(deltaPos.x);
 			if (rotY)
-				transform.Rotate(transform.getUp(),   (float) Math.toRadians(deltaPos.x * sensitivity));
+				transform.Rotate(transform.calcAndReturnUpAxis(),   (float) Math.toRadians(deltaPos.x * sensitivity));
 			if (rotX)
-				transform.Rotate(transform.getRight(),(float) Math.toRadians(deltaPos.y * sensitivity *-1));
+				transform.Rotate(transform.calcAndReturnForwardAxis(),(float) Math.toRadians(deltaPos.y * sensitivity *-1));
 
 			if (rotY || rotX)
 				Input.SetMousePosition(centerPosition);
@@ -97,7 +102,6 @@ public class Camera extends GameObject {
 	public void update()
 
 	{
-		
 		keyBoardUpdate();
 		mouseUpdate();
 	}

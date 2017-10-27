@@ -9,79 +9,125 @@ import renderEngine.MasterRenderer;
 
 public class Player extends Entity {
 
-	private float movementSpeed = 1f;
-	private float rotationSpeed = 0.01f;
+	private float movementSpeed = 20f;
+	private float rotationSpeed = 10f;
+	private float upwardsSpeed = 0;
+	private static float GRAVITY = 500;
+	private static float JUMP_POWER = 250;
+	private Vector3f movementDirection;
+	private Vector3f rotation;
+	
 
-	private float pitch;
-	private float yaw;
-	private float roll;
-
-	private Vector3f target = new Vector3f(1, 3, 0);
-	private Vector3f direction = new Vector3f(0, 0, 0);
-
-	private Vector3f right = new Vector3f(0, 0, 0);
-	private Vector3f up = new Vector3f(0, 1, 0);
-
-	// private Transform transform;
 
 	public Player(TexturedModel model, Vector3f position, Quaternionf rotation, Vector3f scale) {
 		super(model, position, rotation, scale);
 
 	}
-
-	public void update() {
-
+	
+	public void getInput() {
+		
+		movementDirection = new Vector3f(0,0,0);
+		rotation = new Vector3f(0,0,0);
 		if (Input.GetKey(Input.KEY_W)) {
-			transform.move(transform.getForward(), movementSpeed);
-			//transform.SetPos(transform.GetPos().add(new Vector3f(-1, 0, 0)));
+			movementDirection.add(new Vector3f(1,0,0));
 		}
 		if (Input.GetKey(Input.KEY_S)) {
-			//transform.SetPos(transform.GetPos().add(new Vector3f(1, 0, 0)));
-			transform.move(transform.getForward(), -movementSpeed);
+			movementDirection.add(new Vector3f(-1,0,0));
 		}
 		if (Input.GetKey(Input.KEY_A)) {
-			//transform.SetPos(transform.GetPos().add(new Vector3f(0, 0, 1)));
-			transform.move(transform.getRight(), -movementSpeed);
+			movementDirection.add(new Vector3f(0,0,1));
 		}
 		if (Input.GetKey(Input.KEY_D)) {
-			//transform.SetPos(transform.GetPos().add(new Vector3f(0, 0, -1)));
-			transform.move(transform.getRight(), movementSpeed);
+			movementDirection.add(new Vector3f(0,0,-1));
 		}
-		
-	
 		if (Input.GetKey(Input.KEY_Z)) {
-			transform.move(transform.getUp(), movementSpeed);
-			//transform.SetPos(transform.GetPos().add(new Vector3f(0, 1, 0)));
+			movementDirection.add(new Vector3f(0,1,0));
 		}
 		if (Input.GetKey(Input.KEY_C)) {
-			transform.move(transform.getUp(), -movementSpeed);
-			//transform.SetPos(transform.GetPos().add(new Vector3f(0, -1, 0)));
+			movementDirection.add(new Vector3f(0,-1,0));
 		}
-			
 		if (Input.GetKey(Input.KEY_T)) {
-			transform.Rotate( new Vector3f(1,0,0), rotationSpeed);
+			rotation.add(new Vector3f(1,0,0));
 		}
 		if (Input.GetKey(Input.KEY_G)) {
-			transform.Rotate( new Vector3f(1,0,0), -rotationSpeed);
+			rotation.add(new Vector3f(-1,0,0));
 		}
 		if (Input.GetKey(Input.KEY_Y)) {
-			transform.Rotate( new Vector3f(0,1,0), rotationSpeed);
+			rotation.add(new Vector3f(0,1,0));
 		}
 		if (Input.GetKey(Input.KEY_H)) {
-			transform.Rotate( new Vector3f(0,1,0), -rotationSpeed);
+			rotation.add(new Vector3f(0,-1,0));
 		}
 		if (Input.GetKey(Input.KEY_U)) {
-			transform.Rotate( new Vector3f(0,0,1), rotationSpeed);
+			rotation.add(new Vector3f(0,0,1));
 		}
 		if (Input.GetKey(Input.KEY_J)) {
-			transform.Rotate( new Vector3f(0,0,1), -rotationSpeed);
+			rotation.add(new Vector3f(0,0,-1));
 		}
-		if (Input.GetKey(Input.KEY_P)) {
-			transform.SetPos(new Vector3f(0,0,0));
-		}
+	}
 
+	public void update() {
+		upwardsSpeed -= GRAVITY*DisplayManager.getFrameTimeSeconds();
+		//if(upwardsSpeed < 0) upwardsSpeed = 0;
+		//getInput();
+		move();
 		
-
+	}
+	public void move() {
+		
+		float delta = DisplayManager.getFrameTimeSeconds();
+		
+		/*transform.Rotate(new Vector3f(1,0,0).mul(rotation), rotationSpeed*delta);
+		transform.Rotate(new Vector3f(0,1,0).mul(rotation), rotationSpeed*delta);
+		transform.Rotate(new Vector3f(0,0,1).mul(rotation), rotationSpeed*delta);
+		
+		transform.move(movementDirection, movementSpeed*delta);
+		*/
+		
+		if (Input.GetKey(Input.KEY_W)) {
+			transform.move(transform.getForward(), movementSpeed*delta);
+		}
+		if (Input.GetKey(Input.KEY_S)) {
+			transform.move(transform.getForward(), -movementSpeed*delta);
+		}
+		if (Input.GetKey(Input.KEY_A)) {
+			transform.move(transform.getRight(), -movementSpeed*delta);
+		}
+		if (Input.GetKey(Input.KEY_D)) {
+			transform.move(transform.getRight(), movementSpeed*delta);
+		}
+		if (Input.GetKey(Input.KEY_Z)) {
+			transform.move(transform.getUp(), movementSpeed*delta);
+		}
+		if (Input.GetKey(Input.KEY_C)) {
+			transform.move(transform.getUp(), -movementSpeed*delta);
+		}
+		if (Input.GetKey(Input.KEY_T)) {
+			transform.Rotate( new Vector3f(1,0,0), rotationSpeed*delta);
+		}
+		if (Input.GetKey(Input.KEY_G)) {
+			transform.Rotate( new Vector3f(1,0,0), -rotationSpeed*delta);
+		}
+		if (Input.GetKey(Input.KEY_Y)) {
+			transform.Rotate( new Vector3f(0,1,0), rotationSpeed*delta);
+		}
+		if (Input.GetKey(Input.KEY_H)) {
+			transform.Rotate( new Vector3f(0,1,0), -rotationSpeed*delta);
+		}
+		if (Input.GetKey(Input.KEY_U)) {
+			transform.Rotate( new Vector3f(0,0,1), rotationSpeed*delta);
+		}
+		if (Input.GetKey(Input.KEY_J)) {
+			transform.Rotate( new Vector3f(0,0,1), -rotationSpeed*delta);
+		}
+		if (Input.GetKey(Input.KEY_SPACE)) {
+			upwardsSpeed = JUMP_POWER;
+		}
+		if(transform.GetPos().y >0 || upwardsSpeed>0) {
+			transform.move(new Vector3f(0,1,0), upwardsSpeed*delta);
+		}else {
+			transform.GetPos().y = 0;
+		}
 	}
 
 	

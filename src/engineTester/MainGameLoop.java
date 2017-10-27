@@ -41,11 +41,11 @@ public class MainGameLoop {
 		
 
 		Player 	player 	= 	new Player(dragonModel, new Vector3f(0, 0, 			 0), standardRotation, standardScale); 	
-		Camera 	camera 	= 	new Camera(				new Vector3f(0, -150, 			 0), standardRotation, standardScale); 				
+		Camera 	camera 	= 	new Camera(				new Vector3f(00, 100, 	500), standardRotation, standardScale); 				
 		Light 	light 	= 	new Light(				new Vector3f(0, 2000000, 	20), new Vector3f(1, 1, 1)); 						
 		Terrain terrain =   new Terrain(0,0, loader, texturePack, blendMap);
 		MasterRenderer renderer = new MasterRenderer(); 
-		//camera.getTransform().SetRot(new Quaternionf(0,0.50f,0,1));
+		camera.getTransform().SetRot(new Quaternionf(0,0.0f,0,1));
 		player.getTransform().SetRot(new Quaternionf(0,0.0f,0,1));
 
 		while (DisplayManager.notClose() && !Input.GetKey(Input.KEY_Q)) {
@@ -64,8 +64,12 @@ public class MainGameLoop {
 			renderer.processTerrain(terrain);
 			renderer.render(light, camera);
 
-			//System.out.print(camera.getTransform().Vec3ToString(player.getTransform().GetPos())+"   ");
-			System.out.println(player.getTransform().Vec3ToString(player.getTransform().getForward()));
+			System.out.print(player.getTransform().Vec3ToString(player.getTransform().GetPos())+"   ");
+			System.out.println("  Forward: "+camera.getTransform().Vec3ToString(camera.getTransform().getForward()));
+//			System.out.print("  Right: "+camera.getTransform().Vec3ToString(camera.getTransform().getRight()));
+//			System.out.println("  Up: "+camera.getTransform().Vec3ToString(camera.getTransform().getUp()));
+//			System.out.print("Dragon pos: "+player.getTransform().Vec3ToString(player.getTransform().GetPos()));
+//			System.out.println("Terrain pos: "+terrain.getTransform().Vec3ToString(terrain.getTransform().GetPos()));
 			DisplayManager.updateDisplay();
 			// renderer.checkError();
 		}

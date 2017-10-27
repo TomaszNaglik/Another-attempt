@@ -38,7 +38,7 @@ public class Transform {
 
 
 	public void Rotate(Vector3f axis, float angle) {
-		rotation.rotateAxis(angle, axis);
+		this.rotation.rotateAxis(angle, axis);
 		calcForwardAxis();
 		calcRightAxis();
 		calcUpAxis();
@@ -85,6 +85,10 @@ public class Transform {
 	public void calcUpAxis() {
 		up = calcOwnUp();
 	}
+	public Vector3f calcAndReturnUpAxis() {
+		up = calcOwnUp();
+		return up;
+	}
 	
 
 
@@ -92,6 +96,12 @@ public class Transform {
 	public void calcForwardAxis() {
 		//rotation.normalizedPositiveX(forward);
 		forward = calcOwnForward();
+	}
+	
+	public Vector3f calcAndReturnForwardAxis() {
+		
+		forward = calcOwnForward();
+		return forward;
 	}
 
 	public Vector3f getRight() {
