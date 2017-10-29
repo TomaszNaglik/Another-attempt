@@ -20,9 +20,10 @@ public class Maths
 	{
 		Matrix4f transformationMatrix = new Matrix4f();
 		transformationMatrix.scale(transform.GetScale());
-		
-		transformationMatrix.translate(transform.GetPos());
 		transformationMatrix.rotate(transform.GetRot());
+		transformationMatrix.translate(transform.GetPos());
+		
+		transformationMatrix.invert();
 
 		return transformationMatrix;
 	}
@@ -35,7 +36,7 @@ public class Maths
 		Vector3f position = new Vector3f(camera.getTransform().GetPos());
 		
 		//rotation.mul(new Quaternionf(0,0,1,0));
-		position.mul(-1);
+		//position.mul(-1);
 		
 		Vector3f up = new Vector3f(camera.getTransform().getUp());
 		Vector3f right = new Vector3f(camera.getTransform().getRight());
@@ -45,6 +46,7 @@ public class Maths
 		
 		viewMatrix.rotate(rotation);
 		viewMatrix.translate(position);
+		viewMatrix.invert();
 		//viewMatrix.lookAt(pos, pos.add(forward), up);
 		//viewMatrix.
 		//System.out.println(viewMatrix.toString());

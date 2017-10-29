@@ -41,7 +41,8 @@ public class MainGameLoop {
 		
 
 		Player 	player 	= 	new Player(dragonModel, new Vector3f(0, 0, 			 0), standardRotation, standardScale); 	
-		Camera 	camera 	= 	new Camera(				new Vector3f(00, 100, 	500), standardRotation, standardScale); 				
+		Camera camera = new Camera(player);
+		//Camera 	camera 	= 	new Camera(				new Vector3f(00, 100, 	500), standardRotation, standardScale); 				
 		Light 	light 	= 	new Light(				new Vector3f(0, 2000000, 	20), new Vector3f(1, 1, 1)); 						
 		Terrain terrain =   new Terrain(0,0, loader, texturePack, blendMap);
 		MasterRenderer renderer = new MasterRenderer(); 

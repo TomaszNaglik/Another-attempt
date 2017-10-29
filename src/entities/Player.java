@@ -67,9 +67,9 @@ public class Player extends Entity {
 	}
 
 	public void update() {
-		upwardsSpeed -= GRAVITY*DisplayManager.getFrameTimeSeconds();
+		//upwardsSpeed -= GRAVITY*DisplayManager.getFrameTimeSeconds();
 		//if(upwardsSpeed < 0) upwardsSpeed = 0;
-		//getInput();
+		getInput();
 		move();
 		
 	}
@@ -77,14 +77,18 @@ public class Player extends Entity {
 		
 		float delta = DisplayManager.getFrameTimeSeconds();
 		
-		/*transform.Rotate(new Vector3f(1,0,0).mul(rotation), rotationSpeed*delta);
-		transform.Rotate(new Vector3f(0,1,0).mul(rotation), rotationSpeed*delta);
-		transform.Rotate(new Vector3f(0,0,1).mul(rotation), rotationSpeed*delta);
+		if(rotation.x != 0) 
+			transform.Rotate(new Vector3f(1,0,0).mul(rotation), rotationSpeed*delta);
+		if(rotation.y != 0) 
+			transform.Rotate(new Vector3f(0,1,0).mul(rotation), rotationSpeed*delta);
+		if(rotation.z != 0) 
+			transform.Rotate(new Vector3f(0,0,1).mul(rotation), rotationSpeed*delta);
 		
+		if(!movementDirection.equals(new Vector3f(0,0,0))) {
 		transform.move(movementDirection, movementSpeed*delta);
-		*/
+		}
 		
-		if (Input.GetKey(Input.KEY_W)) {
+		/*if (Input.GetKey(Input.KEY_W)) {
 			transform.move(transform.getForward(), movementSpeed*delta);
 		}
 		if (Input.GetKey(Input.KEY_S)) {
@@ -127,7 +131,7 @@ public class Player extends Entity {
 			transform.move(new Vector3f(0,1,0), upwardsSpeed*delta);
 		}else {
 			transform.GetPos().y = 0;
-		}
+		}*/
 	}
 
 	

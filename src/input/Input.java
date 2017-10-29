@@ -187,4 +187,9 @@ public class Input {
 		Mouse.setGrabbed(!enabled);
 	}
 
+	public static float getDWheel() {
+		
+		return Mouse.getDWheel();
+	}
+
 }

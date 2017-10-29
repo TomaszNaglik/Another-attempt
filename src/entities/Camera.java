@@ -1,6 +1,7 @@
 package entities;
 import org.joml.*;
 import org.joml.Math;
+import org.lwjgl.input.Mouse;
 
 import gameObject.GameObject;
 import gameObject.Transform;
@@ -18,15 +19,76 @@ public class Camera extends GameObject {
 
 	private boolean locked = false;
 	private float sensitivity = 1.1f;
-
+	
+	private Player player;
+	private float distanceFromPlayer = 50;
+	private float angleAroundPlayer = 0;
+	private float pitch = 20;
+	
+	float rotY = 0;
+	
+	public Camera(Player player)
+	{
+		super(new Vector3f(0,0,0), new Quaternionf(0,0,0,1), new Vector3f(1,1,1));
+		this.player = player;
+		
+	}
 	public Camera(Vector3f position, Quaternionf rotation, Vector3f scale) {
 		super(position, rotation, scale);
 
 	}
 	
+	private void calculateZoom() {
+		float zoomLevel = Input.getDWheel() * 0.1f;
+		distanceFromPlayer -= zoomLevel;
+	}
+	private void calculatePitch() {
+		if(Input.GetMouse(1)) {
+			float pitchChange = Mouse.getDY() * 0.1f;
+			pitch -= pitchChange;
+		}
+	}
 	
+	private void calculateAngleAroundPlayer() {
+		if(Input.GetMouse(0)) {
+			float angleChange = Mouse.getDX() * 0.3f;
+			angleAroundPlayer -= angleChange;
+		}
+	}
 	
+	private	void playerCameraUpdate() {
+		calculateZoom();
+		calculatePitch();
+		calculateAngleAroundPlayer();
+	}
+	
+	private void playerCameraPosition() {
+		float hDistance = calculateHDistance();
+		float vDistance = calculateVDistance();
+		calculateCameraPosition(hDistance, vDistance);
+	}
+	
+	private void calculateCameraPosition(float hDis, float vDis) {
+		float theta = rotY + angleAroundPlayer;
+		float offsetX = (float) (hDis * Math.sin(Math.toRadians(theta)));
+		float offsetZ = (float) (hDis * Math.cos(Math.toRadians(theta)));
+		
+		transform.GetPos().x = player.getTransform().GetPos().x - offsetX;
+		transform.GetPos().z = player.getTransform().GetPos().z - offsetZ;
+		transform.GetPos().y = player.getTransform().GetPos().y + vDis;
+		transform.GetRot().rotateAxis((float) Math.toRadians(180 - theta), transform.calcAndReturnUpAxis());
+	}
+	
+	private float calculateHDistance() {
+		return (float) (distanceFromPlayer * Math.cos(Math.toRadians(pitch)));
+	}
+	private float calculateVDistance() {
+		return (float) (distanceFromPlayer * Math.sin(Math.toRadians(pitch)));
+	}
+	
+		
 	public void keyBoardUpdate() {
+	
 //		if (Input.GetKey(Input.KEY_K)) {
 //			MasterRenderer.setDensity(MasterRenderer.getDensity() + 0.00005f);
 //		}
@@ -104,6 +166,8 @@ public class Camera extends GameObject {
 	{
 		keyBoardUpdate();
 		mouseUpdate();
+		//playerCameraUpdate();
+		//playerCameraPosition();
 	}
 
 	
