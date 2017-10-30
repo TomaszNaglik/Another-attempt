@@ -138,7 +138,7 @@ public class Transform {
 	
 	private Vector3f calcOwnForward() {
 		Vector3f r = new Vector3f();
-		r.x = -2 * (rotation.x*rotation.z + rotation.w*rotation.y);
+		r.x = 2 * (rotation.x*rotation.z + rotation.w*rotation.y);
 		r.y = 2 * (rotation.y*rotation.z - rotation.w*rotation.x);
 		r.z = 1 - 2 * (rotation.x*rotation.x + rotation.y*rotation.y);
 		
@@ -149,14 +149,14 @@ public class Transform {
 		Vector3f r = new Vector3f();
 		r.x = 1 - 2 * (rotation.y*rotation.y + rotation.z*rotation.z);
 		r.y = 2 * (rotation.x*rotation.y + rotation.w*rotation.z);
-		r.z = -2 * (rotation.x*rotation.z - rotation.w*rotation.y);
+		r.z = 2 * (rotation.x*rotation.z - rotation.w*rotation.y);
 		return r.mul(-1);
 	}
 
 	private Vector3f calcOwnUp() {
 		Vector3f r = new Vector3f();
 		r.x = 2 * (rotation.x*rotation.y - rotation.w*rotation.z);
-		r.y = 1 - (-2) * (rotation.x*rotation.x + rotation.z*rotation.z);
+		r.y = 1 - 2 * (rotation.x*rotation.x + rotation.z*rotation.z);
 		r.z = 2 * (rotation.y*rotation.z + rotation.w*rotation.x);
 		
 		return r;
