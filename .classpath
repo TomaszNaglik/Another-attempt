@@ -8,11 +8,12 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Tomasz.Naglik/Google Drive/Tomek/Programming/Git/Another attempt/lib/jars/lwjgl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/Tomasz.Naglik/Google Drive/Tomek/Programming/Git/Another attempt/lib/natives"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Another attempt/lib/natives"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Tomasz.Naglik/Google Drive/Tomek/Programming/Git/Another attempt/lib/jars/lwjgl_util.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Tomasz.Naglik/Google Drive/Tomek/Programming/Git/Another attempt/lib/jars/slick-util.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Tomasz.Naglik/Documents/Another-attempt/lib/jars/joml-1.9.4.jar"/>
+	<classpathentry kind="lib" path="lib/jars/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="lib/jars/joml-1.9.4.jar"/>
+	<classpathentry kind="lib" path="lib/jars/lwjgl.jar"/>
+	<classpathentry kind="lib" path="lib/jars/slick-util.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
