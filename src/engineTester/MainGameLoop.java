@@ -66,7 +66,7 @@ public class MainGameLoop {
 			renderer.render(light, camera);
 
 			System.out.print(player.getTransform().Vec3ToString(player.getTransform().GetPos())+"   ");
-			System.out.println("  Forward: "+camera.getTransform().Vec3ToString(camera.getTransform().getForward()));
+			System.out.println("  Forward: "+camera.getTransform().Vec3ToString(player.getTransform().getForward()));
 //			System.out.print("  Right: "+camera.getTransform().Vec3ToString(camera.getTransform().getRight()));
 //			System.out.println("  Up: "+camera.getTransform().Vec3ToString(camera.getTransform().getUp()));
 //			System.out.print("Dragon pos: "+player.getTransform().Vec3ToString(player.getTransform().GetPos()));

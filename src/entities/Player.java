@@ -1,5 +1,7 @@
 package entities;
 import org.joml.*;
+//import org.lwjgl.util.vector.Quaternion;
+
 import input.Input;
 //import math.Quaternion;
 //import math.Vector3f;
@@ -10,7 +12,7 @@ import renderEngine.MasterRenderer;
 public class Player extends Entity {
 
 	private float movementSpeed = 20f;
-	private float rotationSpeed = 10f;
+	private float rotationSpeed = 2f;
 	private float upwardsSpeed = 0;
 	private static float GRAVITY = 500;
 	private static float JUMP_POWER = 250;
@@ -24,7 +26,7 @@ public class Player extends Entity {
 
 	}
 	
-	public void getInput() {
+	public void keyBoardsUpdate() {
 		
 		movementDirection = new Vector3f(0,0,0);
 		rotation = new Vector3f(0,0,0);
@@ -66,15 +68,10 @@ public class Player extends Entity {
 		}
 	}
 
-	public void update() {
-		//upwardsSpeed -= GRAVITY*DisplayManager.getFrameTimeSeconds();
-		//if(upwardsSpeed < 0) upwardsSpeed = 0;
-		getInput();
-		move();
+	
+	public void transformUpdate() {
 		
-	}
-	public void move() {
-		
+		keyBoardsUpdate();
 		float delta = DisplayManager.getFrameTimeSeconds();
 		
 		if(rotation.x != 0) 
@@ -83,55 +80,29 @@ public class Player extends Entity {
 			transform.Rotate(new Vector3f(0,1,0).mul(rotation), rotationSpeed*delta);
 		if(rotation.z != 0) 
 			transform.Rotate(new Vector3f(0,0,1).mul(rotation), rotationSpeed*delta);
+		transform.calcAxis();
 		
 		if(!movementDirection.equals(new Vector3f(0,0,0))) {
-		transform.move(movementDirection, movementSpeed*delta);
+			if(movementDirection.x != 0) {
+				transform.Move(transform.getForward().mul(movementDirection.x), movementSpeed*delta);
+			}
+			if(movementDirection.y != 0) {
+				transform.Move(transform.getUp().mul(movementDirection.y), movementSpeed*delta);
+			}
+			if(movementDirection.z != 0) {
+				transform.Move(transform.getRight().mul(movementDirection.z), movementSpeed*delta);
+			}
+			
 		}
 		
-		/*if (Input.GetKey(Input.KEY_W)) {
-			transform.move(transform.getForward(), movementSpeed*delta);
-		}
-		if (Input.GetKey(Input.KEY_S)) {
-			transform.move(transform.getForward(), -movementSpeed*delta);
-		}
-		if (Input.GetKey(Input.KEY_A)) {
-			transform.move(transform.getRight(), -movementSpeed*delta);
-		}
-		if (Input.GetKey(Input.KEY_D)) {
-			transform.move(transform.getRight(), movementSpeed*delta);
-		}
-		if (Input.GetKey(Input.KEY_Z)) {
-			transform.move(transform.getUp(), movementSpeed*delta);
-		}
-		if (Input.GetKey(Input.KEY_C)) {
-			transform.move(transform.getUp(), -movementSpeed*delta);
-		}
-		if (Input.GetKey(Input.KEY_T)) {
-			transform.Rotate( new Vector3f(1,0,0), rotationSpeed*delta);
-		}
-		if (Input.GetKey(Input.KEY_G)) {
-			transform.Rotate( new Vector3f(1,0,0), -rotationSpeed*delta);
-		}
-		if (Input.GetKey(Input.KEY_Y)) {
-			transform.Rotate( new Vector3f(0,1,0), rotationSpeed*delta);
-		}
-		if (Input.GetKey(Input.KEY_H)) {
-			transform.Rotate( new Vector3f(0,1,0), -rotationSpeed*delta);
-		}
-		if (Input.GetKey(Input.KEY_U)) {
-			transform.Rotate( new Vector3f(0,0,1), rotationSpeed*delta);
-		}
-		if (Input.GetKey(Input.KEY_J)) {
-			transform.Rotate( new Vector3f(0,0,1), -rotationSpeed*delta);
-		}
-		if (Input.GetKey(Input.KEY_SPACE)) {
-			upwardsSpeed = JUMP_POWER;
-		}
-		if(transform.GetPos().y >0 || upwardsSpeed>0) {
-			transform.move(new Vector3f(0,1,0), upwardsSpeed*delta);
-		}else {
-			transform.GetPos().y = 0;
-		}*/
+		
+	}
+	
+	public void update() {
+		
+		
+		transformUpdate();
+		
 	}
 
 	

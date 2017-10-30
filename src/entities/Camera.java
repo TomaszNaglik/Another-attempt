@@ -6,6 +6,7 @@ import org.lwjgl.input.Mouse;
 import gameObject.GameObject;
 import gameObject.Transform;
 import input.Input;
+import math.Maths;
 //import math.Quaternion;
 //import math.Vector2f;
 //import math.Vector3f;
@@ -16,6 +17,10 @@ public class Camera extends GameObject {
 
 	private float cameraSpeed = 5.0f;
 	private float rotationSpeed = 1.0f;
+	
+	
+	private Vector3f direction;
+	private Vector3f rotation;
 
 	private boolean locked = false;
 	private float sensitivity = 1.1f;
@@ -37,7 +42,7 @@ public class Camera extends GameObject {
 		super(position, rotation, scale);
 
 	}
-	
+	//thinmatrix player camera
 	private void calculateZoom() {
 		float zoomLevel = Input.getDWheel() * 0.1f;
 		distanceFromPlayer -= zoomLevel;
@@ -76,7 +81,7 @@ public class Camera extends GameObject {
 		transform.GetPos().x = player.getTransform().GetPos().x - offsetX;
 		transform.GetPos().z = player.getTransform().GetPos().z - offsetZ;
 		transform.GetPos().y = player.getTransform().GetPos().y + vDis;
-		transform.GetRot().rotateAxis((float) Math.toRadians(180 - theta), transform.calcAndReturnUpAxis());
+		transform.GetRot().rotateAxis((float) Math.toRadians(180 - theta), transform.getUp());
 	}
 	
 	private float calculateHDistance() {
@@ -85,50 +90,54 @@ public class Camera extends GameObject {
 	private float calculateVDistance() {
 		return (float) (distanceFromPlayer * Math.sin(Math.toRadians(pitch)));
 	}
-	
+	//
 		
 	public void keyBoardUpdate() {
 	
-//		if (Input.GetKey(Input.KEY_K)) {
-//			MasterRenderer.setDensity(MasterRenderer.getDensity() + 0.00005f);
-//		}
-//		if (Input.GetKey(Input.KEY_L)) {
-//			MasterRenderer.setDensity(MasterRenderer.getDensity() - 0.00005f);
-//		}
-		if (Input.GetKey(Input.KEY_UP)) {
-			transform.move(transform.getForward(), cameraSpeed);	
-		}
-		if (Input.GetKey(Input.KEY_DOWN)) {
-			transform.move(transform.getForward(), -cameraSpeed);	
-		}
+		
+		direction = new Vector3f(0,0,0);
+		rotation = new Vector3f(0,0,0);
 		if (Input.GetKey(Input.KEY_LEFT)) {
-			transform.move(transform.getRight(), -cameraSpeed);
+			direction.add(new Vector3f(1,0,0));
 		}
 		if (Input.GetKey(Input.KEY_RIGHT)) {
-			transform.move(transform.getRight(), cameraSpeed);
+			direction.add(new Vector3f(-1,0,0));
 		}
-		if (Input.GetKey(Input.KEY_N)) {
-			transform.Rotate(new Vector3f(1,0,0),   (float) Math.toRadians(rotationSpeed * sensitivity));
-			
+		if (Input.GetKey(Input.KEY_UP)) {
+			direction.add(new Vector3f(0,0,1));
 		}
-		if (Input.GetKey(Input.KEY_M)) {
-			transform.Rotate(new Vector3f(1,0,0),   (float) Math.toRadians(-rotationSpeed * sensitivity));	
-			
+		if (Input.GetKey(Input.KEY_DOWN)) {
+			direction.add(new Vector3f(0,0,-1));
 		}
-		if (Input.GetKey(Input.KEY_J)) {
-			transform.Rotate(new Vector3f(0,1,0),   (float) Math.toRadians(rotationSpeed * sensitivity));	
-			
+		if (Input.GetKey(Input.KEY_PRIOR)) {
+			direction.add(new Vector3f(0,1,0));
 		}
-		if (Input.GetKey(Input.KEY_K)) {
-			transform.Rotate(new Vector3f(0,1,0),   (float) Math.toRadians(-rotationSpeed * sensitivity));	
-			
-		}
-		if (Input.GetKey(Input.KEY_I)) {
-			transform.Rotate(new Vector3f(0,0,1),   (float) Math.toRadians(rotationSpeed * sensitivity));	
+		if (Input.GetKey(Input.KEY_NEXT)) {
+			direction.add(new Vector3f(0,-1,0));
 		}
 		if (Input.GetKey(Input.KEY_O)) {
-			transform.Rotate(new Vector3f(0,0,1),   (float) Math.toRadians(-rotationSpeed * sensitivity));	
+			rotation.add(new Vector3f(1,0,0));
 		}
+		if (Input.GetKey(Input.KEY_P)) {
+			rotation.add(new Vector3f(-1,0,0));
+		}
+		if (Input.GetKey(Input.KEY_K)) {
+			rotation.add(new Vector3f(0,1,0));
+		}
+		if (Input.GetKey(Input.KEY_L)) {
+			rotation.add(new Vector3f(0,-1,0));
+		}
+		if (Input.GetKey(Input.KEY_M)) {
+			rotation.add(new Vector3f(0,0,1));
+		}
+		if (Input.GetKey(Input.KEY_N)) {
+			rotation.add(new Vector3f(0,0,-1));
+		}
+		
+		transform.calcForwardAxis();
+		transform.calcRightAxis();
+		transform.calcUpAxis();
+
 	}
 	public void mouseUpdate() {
 		Vector2f centerPosition = new Vector2f(DisplayManager.getWidth() / 2, DisplayManager.getHeigth() / 2);
@@ -152,9 +161,9 @@ public class Camera extends GameObject {
 			boolean rotX = deltaPos.y != 0;
 			//System.out.println(deltaPos.x);
 			if (rotY)
-				transform.Rotate(transform.calcAndReturnUpAxis(),   (float) Math.toRadians(deltaPos.x * sensitivity));
+				transform.Rotate(transform.getUp(),   (float) Math.toRadians(deltaPos.x * sensitivity));
 			if (rotX)
-				transform.Rotate(transform.calcAndReturnForwardAxis(),(float) Math.toRadians(deltaPos.y * sensitivity *-1));
+				transform.Rotate(transform.getForward(),(float) Math.toRadians(deltaPos.y * sensitivity *-1));
 
 			if (rotY || rotX)
 				Input.SetMousePosition(centerPosition);
@@ -164,13 +173,39 @@ public class Camera extends GameObject {
 	public void update()
 
 	{
-		keyBoardUpdate();
-		mouseUpdate();
+		
+		//mouseUpdate();
 		//playerCameraUpdate();
 		//playerCameraPosition();
+		transformUpdate();
 	}
 
+	private void rotate(Vector3f axis, float angle, float direction){
+		transform.Rotate(axis.mul(direction), angle);
+		//transform.SetRot(Maths.rotateAroundAxis(axis.mul(direction), angle));
+		//transform.GetRot().add(Maths.rotateAroundAxis(axis.mul(direction), angle)).normalize();
+		//transform.GetRot().rotateAxis(angle, axis.x*direction, axis.y*direction, axis.z*direction, transform.GetRot());
+		//transform.SetRot(Maths.rotateAroundAxis(axis.mul(direction), angle).mul(transform.GetRot().conjugate()));
+	}
 	
+	private void transformUpdate() {
+		keyBoardUpdate();
+		float delta = DisplayManager.getFrameTimeSeconds();
+		
+		if(rotation.x != 0) 
+			rotate(new Vector3f(1,0,0),rotationSpeed*delta,rotation.x);
+		if(rotation.y != 0) 
+			rotate(new Vector3f(0,1,0),rotationSpeed*delta,rotation.y);
+		if(rotation.z != 0) 
+			rotate(new Vector3f(0,0,1),rotationSpeed*delta,rotation.z);
+		
+
+		
+		if(!direction.equals(new Vector3f(0,0,0))) {
+		transform.Move(direction, cameraSpeed*delta);
+		}
+		
+	}
 	@Override
 	public void printoutDirection() {
 		System.out.print("C: " + transform.GetPos().toString() + "R : " + transform.GetRot().toString());
