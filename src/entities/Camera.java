@@ -15,8 +15,8 @@ import renderEngine.MasterRenderer;
 
 public class Camera extends GameObject {
 
-	private float cameraSpeed = 5.0f;
-	private float rotationSpeed = 1.0f;
+	private float cameraSpeed = 50.0f;
+	private float rotationSpeed = 5.0f;
 	
 	
 	private Vector3f direction;

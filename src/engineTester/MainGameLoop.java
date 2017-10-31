@@ -44,7 +44,7 @@ public class MainGameLoop {
 		Camera camera = new Camera(player);
 		//Camera 	camera 	= 	new Camera(				new Vector3f(00, 100, 	500), standardRotation, standardScale); 				
 		Light 	light 	= 	new Light(				new Vector3f(0, 2000000, 	20), new Vector3f(1, 1, 1)); 						
-		Terrain terrain =   new Terrain(0,0, loader, texturePack, blendMap);
+		Terrain terrain =   new Terrain(0,0, loader, texturePack, blendMap, "hp");
 		MasterRenderer renderer = new MasterRenderer(); 
 		camera.getTransform().SetRot(new Quaternionf(0,0.0f,0,1));
 		player.getTransform().SetRot(new Quaternionf(0,0.0f,0,1));

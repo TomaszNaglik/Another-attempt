@@ -52,6 +52,7 @@ public class Maths
 	
 	public static Matrix4f createViewMatrix(Camera camera)
 	{
+		
 		Matrix4f cameraRotation = initCamera(camera.getTransform().getForward(),camera.getTransform().getUp());
 		Matrix4f cameraTranslation = new Matrix4f().translate(-camera.getTransform().GetPos().x,-camera.getTransform().GetPos().y,-camera.getTransform().GetPos().z);
 		
