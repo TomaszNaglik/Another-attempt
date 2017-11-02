@@ -25,18 +25,20 @@ public class Terrain extends GameObject {
 
 	private float x;
 	private float z;
-	private RawModel model;
+	protected RawModel model;
 	private TerrainTexturePack texturePack;
 	private TerrainTexture blendMap;
 
-	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap, String heightMap) {
-		super(new Vector3f(gridX, 0, gridZ), new Quaternionf(0, 0, 0, 1), new Vector3f(1, 1, 1));
+	public Terrain(int gridX, int gridY, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap, String heightMap) {
+		super(new Vector3f(gridX, gridY, gridZ), new Quaternionf(0, 0, 0, 1), new Vector3f(1, 1, 1));
 		this.texturePack = texturePack;
 		this.blendMap = blendMap;
 		this.x = transform.GetPos().x;
 		this.z = transform.GetPos().z;
 		this.model = generateTerrain(loader, heightMap);
 	}
+
+	
 
 	private RawModel generateTerrain(Loader loader, String heightMap) {
 		

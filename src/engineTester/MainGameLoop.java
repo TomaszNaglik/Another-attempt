@@ -16,6 +16,7 @@ import objConverter.ModelData;
 import objConverter.OBJFileLoader;
 import renderEngine.*;
 import shaders.StaticShader;
+import terrains.Planet;
 import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
@@ -40,14 +41,16 @@ public class MainGameLoop {
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap2"));
 		
 
-		Player 	player 	= 	new Player(dragonModel, new Vector3f(0, 0, 			 0), standardRotation, standardScale); 	
-		Camera camera = new Camera(player);
-		//Camera 	camera 	= 	new Camera(				new Vector3f(00, 100, 	500), standardRotation, standardScale); 				
+		Player 	player 	= 	new Player(dragonModel, new Vector3f(0, 0, 			0), standardRotation, standardScale); 	
+		//Camera camera = new Camera(player);
+		Camera 	camera 	= 	new Camera(				new Vector3f(0, 50, 	500), standardRotation, standardScale); 				
 		Light 	light 	= 	new Light(				new Vector3f(0, 2000000, 	20), new Vector3f(1, 1, 1)); 						
-		Terrain terrain =   new Terrain(0,0, loader, texturePack, blendMap, "hp");
+		Terrain terrain =   new Terrain(0,0,0, loader, texturePack, blendMap, "hp");
+		Planet planet = new Planet(0,0,0, loader, texturePack, blendMap, "hp");
 		MasterRenderer renderer = new MasterRenderer(); 
 		camera.getTransform().SetRot(new Quaternionf(0,0.0f,0,1));
 		player.getTransform().SetRot(new Quaternionf(0,0.0f,0,1));
+		
 
 		while (DisplayManager.notClose() && !Input.GetKey(Input.KEY_Q)) {
 
@@ -62,7 +65,8 @@ public class MainGameLoop {
 			//player.getTransform().Rotate(player.getTransform().GetUpAxis(), 0.005f);
 			
 			renderer.processEntity(player);
-			renderer.processTerrain(terrain);
+			//renderer.processTerrain(terrain);
+			renderer.processPlanet(planet);
 			renderer.render(light, camera);
 
 			System.out.print(player.getTransform().Vec3ToString(player.getTransform().GetPos())+"   ");

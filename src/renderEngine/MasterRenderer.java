@@ -18,8 +18,10 @@ import math.Maths;
 //import math.Matrix4f;
 //import math.Vector3f;
 import models.TexturedModel;
+import shaders.PlanetShader;
 import shaders.StaticShader;
 import shaders.TerrainShader;
+import terrains.Planet;
 import terrains.Terrain;
 
 public class MasterRenderer {
@@ -41,14 +43,19 @@ public class MasterRenderer {
 
 	private TerrainRenderer terrainRenderer;
 	private TerrainShader terrainShader = new TerrainShader();
+	
+	private PlanetRenderer planetRenderer;
+	private PlanetShader planetShader = new PlanetShader();
 
 	private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
-
+	private List<Planet> planetChunks = new ArrayList<Planet>();
+	
 	public MasterRenderer() {
 		createProjectionMatrix();
 		this.renderer = new EntityRenderer(shader, projectionMatrix);
 		this.terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+		this.planetRenderer = new PlanetRenderer(planetShader, projectionMatrix);
 		enableCulling();
 
 	}
@@ -81,12 +88,25 @@ public class MasterRenderer {
 		terrainShader.loadViewMatrix(camera);
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
+		
+		planetShader.start();
+		planetShader.loadSkyColour(new Vector3f(RED, GREEN, BLUE));
+		planetShader.loadFogVariables(density, gradient);
+		planetShader.loadLight(sun);
+		planetShader.loadViewMatrix(camera);
+		planetRenderer.render(planetChunks);
+		planetShader.stop();
+		
+		planetChunks.clear();
 		entities.clear();
 		terrains.clear();
 	}
 
 	public void processTerrain(Terrain terrain) {
 		terrains.add(terrain);
+	}
+	public void processPlanet(Planet chunk) {
+		planetChunks.add(chunk);
 	}
 
 	public void processEntity(Entity entity) {
