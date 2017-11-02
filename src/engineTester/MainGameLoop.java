@@ -46,7 +46,17 @@ public class MainGameLoop {
 		Camera 	camera 	= 	new Camera(				new Vector3f(0, 50, 	500), standardRotation, standardScale); 				
 		Light 	light 	= 	new Light(				new Vector3f(0, 2000000, 	20), new Vector3f(1, 1, 1)); 						
 		Terrain terrain =   new Terrain(0,0,0, loader, texturePack, blendMap, "hp");
-		Planet planet = new Planet(0,0,0, loader, texturePack, blendMap, "hp");
+		
+		
+		Planet planet0 = new Planet(0,0,0, loader, texturePack, blendMap, "planet",0);
+		Planet planet1 = new Planet(0,0,0, loader, texturePack, blendMap, "planet",1);
+		Planet planet2 = new Planet(0,0,0, loader, texturePack, blendMap, "planet",2);
+		Planet planet3 = new Planet(0,0,0, loader, texturePack, blendMap, "planet",3);
+		Planet planet4 = new Planet(0,0,0, loader, texturePack, blendMap, "planet",4);
+		Planet planet5 = new Planet(0,0,0, loader, texturePack, blendMap, "planet",5);
+		
+		
+		
 		MasterRenderer renderer = new MasterRenderer(); 
 		camera.getTransform().SetRot(new Quaternionf(0,0.0f,0,1));
 		player.getTransform().SetRot(new Quaternionf(0,0.0f,0,1));
@@ -66,7 +76,12 @@ public class MainGameLoop {
 			
 			renderer.processEntity(player);
 			//renderer.processTerrain(terrain);
-			renderer.processPlanet(planet);
+			renderer.processPlanet(planet0);
+			renderer.processPlanet(planet1);
+			renderer.processPlanet(planet2);
+			renderer.processPlanet(planet3);
+			renderer.processPlanet(planet4);
+			renderer.processPlanet(planet5);
 			renderer.render(light, camera);
 
 			System.out.print(player.getTransform().Vec3ToString(player.getTransform().GetPos())+"   ");
